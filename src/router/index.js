@@ -11,7 +11,7 @@ const menu =()=>import("../pages/menu/menu")
 const role = ()=>import("../pages/role/role")
 const manager = ()=>import("../pages/manager/manager")
 const cate = ()=>import("../pages/cate/cate")
-const spec = ()=>import("../pages/spec/spec")
+const specs = ()=>import("../pages/specs/specs")
 const goods = ()=>import("../pages/goods/goods")
 const member = ()=>import("../pages/member/member")
 const banner = ()=>import("../pages/banner/banner")
@@ -57,9 +57,9 @@ export default new Router({
           component:cate
         },
         {
-          path:"spec",
+          path:"specs",
           name:"商品规格",
-          component:spec
+          component:specs
         },
         {
           path:"goods",

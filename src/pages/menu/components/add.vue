@@ -95,7 +95,7 @@ export default {
         "role",
         "manager",
         "cate",
-        "spec",
+        "specs",
         "goods",
         "member",
         "banner",

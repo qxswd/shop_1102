@@ -233,5 +233,59 @@ export const delCate =(data)=>{
         data:qs.stringify(data)
     })
 }
+//添加商品规格
+export const addSpecs = (data)=>{
+    return axios({
+        method:"post",
+        url:baseUrl + "/api/specsadd",
+        data:qs.stringify(data)
+    })
+}
+//商品规格总数
+export const specsCount = ()=>{
+    return axios({
+        method:"get",
+        url:baseUrl + "/api/specscount",
+    })
+}
+// 商品规格列表（分页
+export const getSpecsList = (params)=>{
+    return axios({
+        method:"get",
+        url:baseUrl + "/api/specslist",
+        params
+    })
+}
+
+// 获取商品规格一条
+export const oneSpecs = (params)=>{
+    return axios({
+        method:"get",
+        url:baseUrl + "/api/specsinfo",
+        params
+    })
+}
+
+//商品规格修改
+
+export const updataSpecs = (data)=>{
+    return axios({
+        method:"post",
+        url:baseUrl + "/api/specsedit",
+        data:qs.stringify(data)
+    })
+}
+//商品规格删除
+
+
+export const delSpecs = (data)=>{
+    return axios({
+        method:"post",
+        url:baseUrl + "/api/specsdelete",
+        data:qs.stringify(data)
+    })
+}
+
+
 
 
