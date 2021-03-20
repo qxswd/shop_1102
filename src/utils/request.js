@@ -257,6 +257,13 @@ export const getSpecsList = (params)=>{
     })
 }
 
+// export const getSpecsList1 = ()=>{
+//     return axios({
+//         method:"get",
+//         url:baseUrl + "/api/specslist",
+//     })
+// }
+
 // 获取商品规格一条
 export const oneSpecs = (params)=>{
     return axios({
@@ -287,5 +294,63 @@ export const delSpecs = (data)=>{
 }
 
 
+//商品添加
+export const addGoods  = (data)=>{
+    var form = new FormData()
+    for(let i in data){
+        form.append(i,data[i])
+    }
+    return axios({
+        method:"post",
+        url:baseUrl +"/api/goodsadd",
+        data:form
+    })
+}
+
+//商品总数用于计算分页
+export const goodsCount = ()=>{
+    return axios({
+        method:"get",
+        url:baseUrl + "/api/goodscount"
+    })
+}
+
+//商品列表 /分页
+export const getGoods = (params)=>{
+    return axios({
+        method:"get",
+        url:baseUrl + "/api/goodslist",
+        params
+    })
+}
+
+
+//获取一条商品
+export const oneGoods = (params)=>{
+    return axios({
+        method:"get",
+        url:baseUrl + "/api/goodsinfo",
+        params
+    })
+}
+//商品修改
+export const updateGoods  = (data)=>{
+    var form = new FormData()
+    for(let i in data){
+        form.append(i,data[i])
+    }
+    return axios({
+        method:"post",
+        url:baseUrl +"/api/goodsedit",
+        data:form
+    })
+}
+export const delGoods = (data)=>{
+    return axios({
+        method:"post",
+        url:baseUrl + "/api/goodsdelete",
+        data:qs.stringify(data)
+    })
+}
 
 

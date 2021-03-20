@@ -1,4 +1,4 @@
-import { getSpecsList, specsCount } from "../../utils/request"
+import { getSpecsList,getSpecsList1, specsCount } from "../../utils/request"
 
  const state={
     specsList:[],
@@ -11,6 +11,9 @@ import { getSpecsList, specsCount } from "../../utils/request"
     changeSpecsList(state,arr){
         state.specsList = arr
     },
+    // changeSpecsList1(state,arr){
+    //     state.specsList = arr
+    // },
     changeCount(state,num){
         state.count = num
     },
@@ -19,12 +22,24 @@ import { getSpecsList, specsCount } from "../../utils/request"
     }
 }
  const actions = {
-    specsListActions(context){
+    // specsListActions1(context){
+    //     getSpecsList1().then(res=>{
 
-        var params = {
-            size : context.state.size,
-            page : context.state.page
+           
+    //         context.commit("changeSpecsList1",res.data.list)
+    //         })
+    // },
+    specsListActions(context,ispage = true){
+        if(ispage){
+            var params = {
+                size : context.state.size,
+                page : context.state.page
+            }
         }
+        // var params = {
+        //     size : context.state.size,
+        //     page : context.state.page
+        // }
         getSpecsList(params).then(res=>{
 
             ////////////////////////////
@@ -37,6 +52,7 @@ import { getSpecsList, specsCount } from "../../utils/request"
                     }
                 context.commit("changeSpecsList",res.data.list)
                 })
+       
     },
     countActions(context){
         specsCount().then(res=>{

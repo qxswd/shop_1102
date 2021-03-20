@@ -11,7 +11,7 @@
           <el-form-item label="二级分类" :label-width="formLabelWidth">
             <el-select v-model="form.second_cateid" >
               <el-option label="--请选择--" value="-1" disabled></el-option>
-              <el-option v-for="item in seconedCate" :key="item.id" :label="item.catename" :value="item.id"></el-option>
+              <el-option v-for="item in secondCate" :key="item.id" :label="item.catename" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="商品名称" :label-width="formLabelWidth">
@@ -32,15 +32,15 @@
         </el-form-item>
 
           <el-form-item label="商品规格" :label-width="formLabelWidth">
-            <el-select v-model="form.specsid" >
+            <el-select v-model="form.specsid" @change="changeSpecs(false)">
               <el-option label="--请选择--" value="" disabled></el-option>
-              <!-- <el-option v-for="item in roleList" :key="item.id" :label="item.rolename" :value="item.id"></el-option> -->
+              <el-option v-for="item in specsList" :key="item.id" :label="item.specsname" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="规格属性" :label-width="formLabelWidth">
-            <el-select v-model="form.specsattr" >
+            <el-select v-model="form.specsattr" multiple>
               <el-option label="--请选择--" value="" disabled></el-option>
-              <!-- <el-option v-for="item in roleList" :key="item.id" :label="item.rolename" :value="item.id"></el-option> -->
+              <el-option v-for="item,index in secondSpecs" :key="index" :label="item" :value="item"></el-option>
             </el-select>
            </el-form-item>
           <el-form-item label="是否新品" :label-width="formLabelWidth">
@@ -71,15 +71,16 @@
 <script>
 import E from 'wangeditor'
 import { mapActions, mapGetters } from 'vuex'
-import { warningAlert } from '../../../utils/alert'
+import { successAlert, warningAlert } from '../../../utils/alert'
+import { addGoods ,oneGoods,updateGoods} from '../../../utils/request'
 
 export default {
-    props:["info"],
     data(){
         return{
             imageUrl:"",   //要显示的地址
             formLabelWidth:"120px",
-            seconedCate:[],
+            secondCate:[],
+            secondSpecs:[],
             editor:"",
             form:{
                 first_cateid:'',
@@ -99,12 +100,17 @@ export default {
     },
     computed:{
         ...mapGetters({
-            "cateList":"cate/cateList"
+            "cateList":"cate/cateList",
+            "specsList":"specs/specsList",
+            "goodsList":"goods/goodsList"
         })
     },
     methods:{
         ...mapActions({
-            "requestCateList":"cate/cateListActions"
+            "requestCateList":"cate/cateListActions",
+            "requestSpecsList":"specs/specsListActions",
+            "requestGoodsList":"goods/goodsListActions"
+            // "requestSpecsList1":"specs/specsListActions1"
         }),
         opened(){
             this.editor = new E('#box')
@@ -117,9 +123,9 @@ export default {
             }
             // console.log(this.form.first_cateid);
             var index = this.cateList.findIndex(item=>item.id == this.form.first_cateid)
-            this.seconedCate = this.cateList[index].children
-            // console.log(this.seconedCate[0].id);
-            // console.log(this.seconedCate[0].catename);
+            this.secondCate = this.cateList[index].children
+            // console.log(this.secondCate[0].id);
+            // console.log(this.secondCate[0].catename);
         },
         changeImg(e){
           // console.log(e);
@@ -134,20 +140,72 @@ export default {
             return
           }
           this.imageUrl = URL.createObjectURL(e.raw)
-          
+          this.form.img = e.raw;
         },
-        cancel(){
+        changeSpecs(){
+          // console.log(this.specsList[0])
+          var index = this.specsList.findIndex(item=>item.id == this.form.specsid)
 
+          // console.log(this.specsList[0])
+
+          this.secondSpecs = this.specsList[index].attrs
+          // console.log(this.secondSpecs);
+        },
+
+        cancel(){
+          this.info.show = false
+          this.form = {
+            first_cateid:'',
+            second_cateid:'',
+            goodsname:'',
+            price:'',
+            market_price:'',
+            img:'',
+            description:'',
+            specsid:'',
+            specsattr:[],
+            isnew:1,
+            ishot:1,
+            status:1
+          }
+          this.imageUrl = ""
         },
         confirm(){
+          //描述信息处理
+        this.form.description = this.editor.txt.html()
+          addGoods(this.form).then(res=>{
+            successAlert(res.data.msg);
+            this.cancel()
+            this.requestGoodsList(this.info.value)
+          })
 
         },
-        update(){
+        getDetail(id){
+          oneGoods({id}).then(res=>{
+            this.form = res.data.list;
+            this.form.id = id;
 
+            //获取二级分类
+            this.changecate(true)
+            this.imageUrl = this.$www + this.form.img;
+            //获取规格属性
+            this.changeSpecs(true);
+            this.form.specsattr = this.form.specsattr.split(",")
+          })
+        },
+        update(){
+          this.form.description = this.editor.txt.html();
+          updateGoods(this.form).then(res=>{
+            // console.log(res);
+            successAlert(res.data.msg);
+            this.cancel();
+            // this.requestGoodsList()
+          })
         }
     },
     mounted(){
         this.requestCateList()
+        this.requestSpecsList(false)
     }
 
 }

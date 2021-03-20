@@ -109,6 +109,7 @@ export default {
         img: "",
         status: 1, //1正常 2 禁用
       };
+      this.imageUrl = ""
     },
     confirm() {
         console.log(this.form);

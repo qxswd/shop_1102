@@ -49,7 +49,8 @@ export default {
     },
     methods:{
         ...mapActions({
-            "requestSpecsList":"specs/specsListActions"
+            "requestSpecsList":"specs/specsListActions",
+            "requestCount":"specs/countActions",
         }),
         addAttr(){
             // 处理规格属性
@@ -88,7 +89,7 @@ export default {
             this.attrsArr.push({value:""});
             this.requestSpecsList()
             this.requestSpecsList()
-
+            this.requestCount()
 
         },
         getDetail(id){
@@ -109,10 +110,13 @@ export default {
         },
         update(){
            
-            //处理规格属性
+            // 处理规格属性
             if(this.attrsArr.some(item=>item.value !== "")){
-                warningAlert("规格属性值不能为空o")
-                return
+                // console.log(this.attrsArr.findIndex(item=>item.value == ""))
+                if(this.attrsArr.findIndex(item=>item.value == "") != 0){
+                   warningAlert("请点击添加规格属性值，而后再点击修改")
+                    return 
+                }
             }
 
             //////  && this.attrsArr[0].value == ""
@@ -121,7 +125,7 @@ export default {
             updataSpecs(this.form).then(res=>{
                 successAlert(res.data.msg)
                 this.cancel();
-                this.questSpecsList()
+                this.requestSpecsList()
             })
         }
     }
