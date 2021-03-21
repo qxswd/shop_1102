@@ -75,6 +75,7 @@ import { successAlert, warningAlert } from '../../../utils/alert'
 import { addGoods ,oneGoods,updateGoods} from '../../../utils/request'
 
 export default {
+  props:["info"],
     data(){
         return{
             imageUrl:"",   //要显示的地址
@@ -102,14 +103,16 @@ export default {
         ...mapGetters({
             "cateList":"cate/cateList",
             "specsList":"specs/specsList",
-            "goodsList":"goods/goodsList"
+            // "goodsList":"goods/goodsList"
         })
     },
     methods:{
         ...mapActions({
             "requestCateList":"cate/cateListActions",
             "requestSpecsList":"specs/specsListActions",
-            "requestGoodsList":"goods/goodsListActions"
+            "requestGoodsList":"goods/goodsListActions",
+            "requestCount":"goods/countActions",
+
             // "requestSpecsList1":"specs/specsListActions1"
         }),
         opened(){
@@ -176,7 +179,9 @@ export default {
           addGoods(this.form).then(res=>{
             successAlert(res.data.msg);
             this.cancel()
-            this.requestGoodsList(this.info.value)
+            this.requestCount()
+
+            this.requestGoodsList(null)
           })
 
         },

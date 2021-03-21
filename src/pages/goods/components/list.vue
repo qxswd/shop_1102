@@ -94,7 +94,8 @@ export default {
                 //删除请求
                 delGoods({id}).then(res=>{
                     successAlert(res.data.msg)
-                    // this.requestGoodsList()
+                    
+                    this.requestCount()
                     this.requestGoodsList(this.value)
 
                 })
